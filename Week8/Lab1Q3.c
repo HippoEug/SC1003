@@ -22,10 +22,6 @@ int main() {
 					printf("2");
 					break;
 			}
-			
-			//if(height % 2 == 1) { // change something here
-			//	printf("%d", repeat);
-			//}
 		}
 		printf("\n");
 	}

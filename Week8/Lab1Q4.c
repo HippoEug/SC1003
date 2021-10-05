@@ -12,9 +12,9 @@ int main() {
 	scanf_s("%f", &inputX);
 
 	for (int i = 1; i <= 10; i++) {
-    		// Numerator: x^4 is x multiplied by x^3
-		numerator = numerator*inputX;
-    		// Denominator: Factorial 4! is 4 multiplied by factorial 3!
+		// Numerator: x^4 is x multiplied by x^3
+		numerator = numerator * inputX;
+		// Denominator: Factorial 4! is 4 multiplied by factorial 3!
 		denominator = denominator * i;
 
 		result += (numerator / denominator);

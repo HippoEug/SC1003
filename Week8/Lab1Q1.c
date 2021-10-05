@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 int main() {
-	int studentNumber = 0;
+	int studentNumber;
 	int marks;
 
 	printf("Enter Student ID: \n");

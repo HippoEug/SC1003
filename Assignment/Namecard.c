@@ -8,7 +8,7 @@ void showChoice();
 void listNameCards(struct Namecard namecard[], int* numberOfNameCards);
 void addNameCard(struct Namecard namecard[], int* numberOfNameCards);
 void removeNameCard(struct Namecard namecard[], int* numberOfNameCards);
-void getNameCard();
+void getNameCard(struct Namecard namecard[], int* numberOfNameCards);
 
 typedef struct {
 	int nameCardID; // Stores name card identification number
@@ -40,7 +40,7 @@ int main() {
 			removeNameCard(namecard, &numberOfNameCards);
 			break;
 		case 4:
-			getNameCard();
+			getNameCard(namecard, &numberOfNameCards);
 			break;
 		case 5:
 			break;
@@ -150,22 +150,13 @@ void removeNameCard(Namecard namecard[], int* numberOfNameCards) {
 				tempInputName[iterChar] = tolower(inputPersonName[iterChar]);
 			}
 
-			printf("tempStructName: %s\n", tempStructName); // debug
-			printf("tempInputtName: %s\n", tempInputName); // debug
-			
-			/*comparisonFlag = 1;
-			for (int iterChar = 0; iterChar < 20; iterChar++) {
-				printf("%c %c\n", tempStructName[iterChar], tempInputName[iterChar]); // debug
-				if (tempStructName[iterChar] != tempInputName[iterChar]) {
-					comparisonFlag = 0;
-					break;
-				}
-			}*/
+			// printf("tempStructName: %s\n", tempStructName); // debug
+			// printf("tempInputtName: %s\n", tempInputName); // debug
 
 			comparisonFlag = strcmp(tempStructName, tempInputName);
 			// printf("Length of tempStructName %d\n", sizeof(tempStructName)); // debug
 			// printf("Length of tempInputName %d\n", sizeof(tempInputName)); // debug
-			printf("strcmp %d\n", comparisonFlag);
+			// printf("strcmp %d\n", comparisonFlag); // debug
 
 			if (comparisonFlag == 0) {
 				printf("The name card is removed\n");
@@ -192,6 +183,47 @@ void removeNameCard(Namecard namecard[], int* numberOfNameCards) {
 }
 
 // Function does XXX
-void getNameCard() {
+void getNameCard(Namecard namecard[], int* numberOfNameCards) {
+	char inputPersonName[20];
+	char tempStructName[20], tempInputName[20];
+
+	int comparisonFlag = 1;
+
 	printf("getNameCard():\n");
+
+	if (*numberOfNameCards != 0) {
+		printf("Enter personName:\n");
+		scanf("%s", inputPersonName);
+
+		for (int i = 0; i < *numberOfNameCards; i++) {
+			for (int iterChar = 0; iterChar < 20; iterChar++) {
+				tempStructName[iterChar] = tolower(namecard[i].personName[iterChar]);
+				tempInputName[iterChar] = tolower(inputPersonName[iterChar]);
+			}
+
+			// printf("tempStructName: %s\n", tempStructName); // debug
+			// printf("tempInputtName: %s\n", tempInputName); // debug
+
+			comparisonFlag = strcmp(tempStructName, tempInputName);
+			// printf("Length of tempStructName %d\n", sizeof(tempStructName)); // debug
+			// printf("Length of tempInputName %d\n", sizeof(tempInputName)); // debug
+			// printf("strcmp %d\n", comparisonFlag);
+
+			if (comparisonFlag == 0) {
+				printf("The target person name is found\n");
+				printf("nameCardID: %d\n", namecard[i].nameCardID);
+				printf("personName: %s\n", namecard[i].personName);
+				printf("companyName: %s\n", namecard[i].companyName);
+				break;
+			}
+			else {
+				printf("The target person name is not found\n");
+			}
+		}
+
+		comparisonFlag = 1;
+	}
+	else {
+		printf("The target person name is not found\n");
+	}
 }

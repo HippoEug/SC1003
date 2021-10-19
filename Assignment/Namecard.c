@@ -30,16 +30,22 @@ int main() {
 		scanf("%d", &choice);
 
 		switch (choice) {
+		// TODO: Create a sorting function based on ascending nameCardID value
 		case 1:
+			// TODO: Remove newline everytime a namecard is output to screen
 			listNameCards(namecard, &numberOfNameCards);
 			break;
 		case 2:
+			// TODO: Add sorting here
 			addNameCard(namecard, &numberOfNameCards);
 			break;
 		case 3:
+			// TODO: Fix "Target name is not in..." for the inital loops until target
+			// TODO: Add sorting here
 			removeNameCard(namecard, &numberOfNameCards);
 			break;
 		case 4:
+			// TODO: Fix "Target name is not in..." for the inital loops until target
 			getNameCard(namecard, &numberOfNameCards);
 			break;
 		case 5:
@@ -47,15 +53,6 @@ int main() {
 		default:
 			break;
 		}
-
-		/**
-		printf("Number of name cards %d\n", numberOfNameCards); // DEBUG
-		for (int i = 0; i < numberOfNameCards; i++) { // DEBUG
-			printf("nameCardID: %d\n", namecard[i].nameCardID); // DEBUG
-			printf("personName: %s\n", namecard[i].personName); // DEBUG
-			printf("companyName: %s\n", namecard[i].companyName); // DEBUG
-		}
-		*/
 	} while (choice != 5);
 }
 
@@ -100,10 +97,17 @@ void addNameCard(Namecard namecard[], int* numberOfNameCards) {
 	else {
 		printf("Enter nameCardID:\n");
 		scanf("%d", &inputNameCardID);
+		getchar(); // Clears newline in buffer for fgets
+
 		printf("Enter personName:\n");
-		scanf("%s", inputPersonName);
+		fgets(inputPersonName, 20, stdin);
+		inputPersonName[strcspn(inputPersonName, "\n")] = 0;
+		//scanf("%s", inputPersonName); // OLD THAT READS SPACE BAR
+
 		printf("Enter companyName:\n");
-		scanf("%s", inputCompanyName);
+		fgets(inputCompanyName, 20, stdin);
+		inputPersonName[strcspn(inputPersonName, "\n")] = 0;
+		//scanf("%s", inputCompanyName); // OLD THAT READS SPACE BAR
 
 		for (int i = 0; i < *numberOfNameCards; i++) {
 			if (namecard[i].nameCardID == inputNameCardID) {
@@ -141,8 +145,10 @@ void removeNameCard(Namecard namecard[], int* numberOfNameCards) {
 		printf("The name card holder is empty\n");
 	}
 	else {
+		getchar(); // Clears newline in buffer for fgets
 		printf("Enter personName:\n");
-		scanf("%s", inputPersonName);
+		fgets(inputPersonName, 20, stdin);
+		inputPersonName[strcspn(inputPersonName, "\n")] = 0;
 
 		for (int i = 0; i < *numberOfNameCards; i++) {
 			for (int iterChar = 0; iterChar < 20; iterChar++) {
@@ -192,8 +198,10 @@ void getNameCard(Namecard namecard[], int* numberOfNameCards) {
 	printf("getNameCard():\n");
 
 	if (*numberOfNameCards != 0) {
+		getchar(); // Clears newline in buffer for fgets
 		printf("Enter personName:\n");
-		scanf("%s", inputPersonName);
+		fgets(inputPersonName, 20, stdin);
+		inputPersonName[strcspn(inputPersonName, "\n")] = 0;
 
 		for (int i = 0; i < *numberOfNameCards; i++) {
 			for (int iterChar = 0; iterChar < 20; iterChar++) {

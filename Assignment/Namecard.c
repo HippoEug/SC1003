@@ -2,25 +2,27 @@
 // This is a NTU Name Card Management Program, using an array of MAX structures.
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 #define MAX 5
-
-void showChoice();
-void listNameCards(struct Namecard namecard[], int* numberOfNameCards);
-void addNameCard(struct Namecard namecard[], int* numberOfNameCards);
-void removeNameCard(struct Namecard namecard[], int* numberOfNameCards);
-void getNameCard(struct Namecard namecard[], int* numberOfNameCards);
 
 typedef struct {
 	int nameCardID; // Stores name card identification number
 	char personName[20]; // Stores name of person in name card
 	char companyName[20]; // Stores name of person's company in name card
-} Namecard;
+} NameCard;
+
+void showChoice();
+void listNameCards(NameCard nameCard[], int* numberOfNameCards);
+void addNameCard(NameCard nameCard[], int* numberOfNameCards);
+void removeNameCard(NameCard nameCard[], int* numberOfNameCards);
+void getNameCard(NameCard nameCard[], int* numberOfNameCards);
+void sortNameCards(NameCard nameCard[], int* numberOfNameCards);
 
 int main() {
 	int choice;
 	int numberOfNameCards = 0;
 
-	Namecard namecard[MAX];
+	NameCard nameCard[MAX];
 
 	printf("NTU NAME CARD HOLDER MANAGEMENT PROGRAM:\n");
 	showChoice(); // Shows user the 5 different options
@@ -30,23 +32,18 @@ int main() {
 		scanf("%d", &choice);
 
 		switch (choice) {
-		// TODO: Create a sorting function based on ascending nameCardID value
 		case 1:
-			// TODO: Remove newline everytime a namecard is output to screen
-			listNameCards(namecard, &numberOfNameCards);
+			listNameCards(nameCard, &numberOfNameCards);
 			break;
 		case 2:
-			// TODO: Add sorting here
-			addNameCard(namecard, &numberOfNameCards);
+			addNameCard(nameCard, &numberOfNameCards);
+			sortNameCards(nameCard, &numberOfNameCards);
 			break;
 		case 3:
-			// TODO: Fix "Target name is not in..." for the inital loops until target
-			// TODO: Add sorting here
-			removeNameCard(namecard, &numberOfNameCards);
+			removeNameCard(nameCard, &numberOfNameCards);
 			break;
 		case 4:
-			// TODO: Fix "Target name is not in..." for the inital loops until target
-			getNameCard(namecard, &numberOfNameCards);
+			getNameCard(nameCard, &numberOfNameCards);
 			break;
 		case 5:
 			break;
@@ -56,6 +53,7 @@ int main() {
 	} while (choice != 5);
 }
 
+// Function displays available choices
 void showChoice() {
 	printf("1: listNameCards()\n");
 	printf("2: addNameCard()\n");
@@ -64,15 +62,15 @@ void showChoice() {
 	printf("5: quit\n");
 }
 
-// Function does XXX
-void listNameCards(Namecard namecard[], int* numberOfNameCards) {
+// Function lists all name cards stored
+void listNameCards(NameCard nameCard[], int* numberOfNameCards) {
 	printf("listNameCards():\n");
 
-	if (*numberOfNameCards != 0) {
+	if (*numberOfNameCards != 0) { // If there are name cards in holder
 		for (int i = 0; i < *numberOfNameCards; i++) {
-			printf("nameCardID: %d\n", namecard[i].nameCardID);
-			printf("personName: %s\n", namecard[i].personName);
-			printf("companyName: %s\n", namecard[i].companyName);
+			printf("nameCardID: %d\n", nameCard[i].nameCardID);
+			printf("personName: %s\n", nameCard[i].personName);
+			printf("companyName: %s", nameCard[i].companyName);
 		}
 	}
 	else {
@@ -80,9 +78,8 @@ void listNameCards(Namecard namecard[], int* numberOfNameCards) {
 	}
 }
 
-// Function does XXX
-void addNameCard(Namecard namecard[], int* numberOfNameCards) {
-	// TODO: SORTING BASED ON ID IN ASCENDING ORDER
+// Function adds new name cards into the struct array
+void addNameCard(NameCard nameCard[], int* numberOfNameCards) {
 	int existFlag = 0;
 
 	int inputNameCardID;
@@ -91,8 +88,20 @@ void addNameCard(Namecard namecard[], int* numberOfNameCards) {
 
 	printf("addNameCard():\n");
 
-	if (*numberOfNameCards >= 5) {
-		printf("The name card folder is full\n");
+	if (*numberOfNameCards >= MAX) { // If name card holder already at MAX capacity
+		// START OF USELESS CODE FOR PRODUCT SPECIFICATION
+		printf("Enter nameCardID:\n");
+		scanf("%d", &inputNameCardID);
+		getchar(); // Clears newline in buffer for fgets
+		printf("Enter personName:\n");
+		fgets(inputPersonName, 20, stdin);
+		inputPersonName[strcspn(inputPersonName, "\n")] = 0;
+		printf("Enter companyName:\n");
+		fgets(inputCompanyName, 20, stdin);
+		inputPersonName[strcspn(inputPersonName, "\n")] = 0;
+		// END OF USELESS CODE FOR PRODUCT SPECIFICATION
+
+		printf("The name card holder is full\n");
 	}
 	else {
 		printf("Enter nameCardID:\n");
@@ -102,29 +111,29 @@ void addNameCard(Namecard namecard[], int* numberOfNameCards) {
 		printf("Enter personName:\n");
 		fgets(inputPersonName, 20, stdin);
 		inputPersonName[strcspn(inputPersonName, "\n")] = 0;
-		//scanf("%s", inputPersonName); // OLD THAT READS SPACE BAR
 
 		printf("Enter companyName:\n");
 		fgets(inputCompanyName, 20, stdin);
 		inputPersonName[strcspn(inputPersonName, "\n")] = 0;
-		//scanf("%s", inputCompanyName); // OLD THAT READS SPACE BAR
 
+		// Iterate through name card holder to see if ID already exists
 		for (int i = 0; i < *numberOfNameCards; i++) {
-			if (namecard[i].nameCardID == inputNameCardID) {
+			if (nameCard[i].nameCardID == inputNameCardID) {
 				printf("The nameCardID has already existed\n");
 				existFlag = 1;
 				break;
 			}
 		}
 
+		// Add to name card holder if ID does not exist
 		if (existFlag == 0) {
-			namecard[*numberOfNameCards].nameCardID = inputNameCardID;
-			strncpy(namecard[*numberOfNameCards].personName, inputPersonName, 20);
-			namecard[*numberOfNameCards].personName[19] = '\0'; // To null terminate strings for strncpy()
-			strncpy(namecard[*numberOfNameCards].companyName, inputCompanyName, 20);
-			namecard[*numberOfNameCards].companyName[19] = '\0'; // To null terminate strings for strncpy()
+			nameCard[*numberOfNameCards].nameCardID = inputNameCardID;
+			strncpy(nameCard[*numberOfNameCards].personName, inputPersonName, 20);
+			nameCard[*numberOfNameCards].personName[19] = '\0'; // To null terminate strings for strncpy()
+			strncpy(nameCard[*numberOfNameCards].companyName, inputCompanyName, 20);
+			nameCard[*numberOfNameCards].companyName[19] = '\0'; // To null terminate strings for strncpy()
 
-			*numberOfNameCards += 1;
+			*numberOfNameCards += 1; // Increase name card count
 			printf("The name card has been added successfully\n");
 		}
 
@@ -132,16 +141,24 @@ void addNameCard(Namecard namecard[], int* numberOfNameCards) {
 	}
 }
 
-// Function does XXX
-void removeNameCard(Namecard namecard[], int* numberOfNameCards) {
+// Function removes old name cards from the struct array
+void removeNameCard(NameCard nameCard[], int* numberOfNameCards) {
 	char inputPersonName[20];
 	char tempStructName[20], tempInputName[20];
 
-	int comparisonFlag = 1;
+	int comparisonFlag = 1; // Flag to see if strings are equal
+	int dataRemovedFlag = 0; // Flag to check if name card removed
 
 	printf("removeNameCard():\n");
 
-	if (*numberOfNameCards == 0) {
+	if (*numberOfNameCards == 0) { // If name card holder already is empty
+		// START OF USELESS CODE FOR PRODUCT SPECIFICATION
+		getchar(); // Clears newline in buffer for fgets
+		printf("Enter personName:\n");
+		fgets(inputPersonName, 20, stdin);
+		inputPersonName[strcspn(inputPersonName, "\n")] = 0;
+		// END OF USELESS CODE FOR PRODUCT SPECIFICATION
+
 		printf("The name card holder is empty\n");
 	}
 	else {
@@ -150,46 +167,57 @@ void removeNameCard(Namecard namecard[], int* numberOfNameCards) {
 		fgets(inputPersonName, 20, stdin);
 		inputPersonName[strcspn(inputPersonName, "\n")] = 0;
 
+		// Iterate through name card holder
 		for (int i = 0; i < *numberOfNameCards; i++) {
+			// Converts name in array and user input to lower case for comparison
 			for (int iterChar = 0; iterChar < 20; iterChar++) {
-				tempStructName[iterChar] = tolower(namecard[i].personName[iterChar]);
+				tempStructName[iterChar] = tolower(nameCard[i].personName[iterChar]);
 				tempInputName[iterChar] = tolower(inputPersonName[iterChar]);
 			}
-
-			// printf("tempStructName: %s\n", tempStructName); // debug
-			// printf("tempInputtName: %s\n", tempInputName); // debug
-
-			comparisonFlag = strcmp(tempStructName, tempInputName);
-			// printf("Length of tempStructName %d\n", sizeof(tempStructName)); // debug
-			// printf("Length of tempInputName %d\n", sizeof(tempInputName)); // debug
-			// printf("strcmp %d\n", comparisonFlag); // debug
-
-			if (comparisonFlag == 0) {
-				printf("The name card is removed\n");
-				printf("nameCardID: %d\n", namecard[i].nameCardID);
-				printf("personName: %s\n", namecard[i].personName);
-				printf("companyName: %s\n", namecard[i].companyName);
-
-				namecard[i].nameCardID = namecard[i + 1].nameCardID;
-				strncpy(namecard[i].personName, namecard[i+1].personName, 20);
-				namecard[i].personName[19] = '\0'; // To null terminate strings for strncpy()
-				strncpy(namecard[i].companyName, namecard[i+1].companyName, 20);
-				namecard[i].companyName[19] = '\0'; // To null terminate strings for strncpy()
-
-				*numberOfNameCards -= 1;
-				break;
+			
+			if (dataRemovedFlag == 0) { // If no name card is removed yet
+				comparisonFlag = strcmp(tempStructName, tempInputName);
 			}
-			else {
-				printf("The target person name is not in the name card holder\n");
+
+			// If name to be removed is found and no name card is removed yet
+			if (comparisonFlag == 0 && dataRemovedFlag == 0) {
+				printf("The name card is removed\n");
+				printf("nameCardID: %d\n", nameCard[i].nameCardID);
+				printf("personName: %s\n", nameCard[i].personName);
+				printf("companyName: %s", nameCard[i].companyName);
+				dataRemovedFlag = 1;
+
+				// Moving data to the left after deletion of a name card
+				nameCard[i].nameCardID = nameCard[i + 1].nameCardID;
+				strncpy(nameCard[i].personName, nameCard[i+1].personName, 20);
+				nameCard[i].personName[19] = '\0'; // To null terminate strings for strncpy()
+				strncpy(nameCard[i].companyName, nameCard[i+1].companyName, 20);
+				nameCard[i].companyName[19] = '\0'; // To null terminate strings for strncpy()*/
+			}
+			// Else if name to be removed has already been found and a name card is removed
+			// Implemented in the event of duplicate names
+			else if (comparisonFlag == 0 && dataRemovedFlag == 1) {
+				// Moving data to the left after removing a name card
+				nameCard[i].nameCardID = nameCard[i + 1].nameCardID;
+				strncpy(nameCard[i].personName, nameCard[i + 1].personName, 20);
+				nameCard[i].personName[19] = '\0'; // To null terminate strings for strncpy()
+				strncpy(nameCard[i].companyName, nameCard[i + 1].companyName, 20);
+				nameCard[i].companyName[19] = '\0'; // To null terminate strings for strncpy()*/
 			}
 		}
 
-		comparisonFlag = 1;
+		*numberOfNameCards -= 1; // Decrease name card count
+		dataRemovedFlag = 0; // Reset flag to no name card is removed yet
+
+		if (comparisonFlag != 0) {
+			printf("The target person name is not in the name card holder\n");
+		}
+		comparisonFlag = 1; // Reset flag to no equal string comparison
 	}
 }
 
-// Function does XXX
-void getNameCard(Namecard namecard[], int* numberOfNameCards) {
+// Function gets a particular name card information
+void getNameCard(NameCard nameCard[], int* numberOfNameCards) {
 	char inputPersonName[20];
 	char tempStructName[20], tempInputName[20];
 
@@ -197,41 +225,64 @@ void getNameCard(Namecard namecard[], int* numberOfNameCards) {
 
 	printf("getNameCard():\n");
 
-	if (*numberOfNameCards != 0) {
+	if (*numberOfNameCards != 0) { // If there are name cards in holder
 		getchar(); // Clears newline in buffer for fgets
 		printf("Enter personName:\n");
 		fgets(inputPersonName, 20, stdin);
 		inputPersonName[strcspn(inputPersonName, "\n")] = 0;
 
+		// Iterate through name card holder
 		for (int i = 0; i < *numberOfNameCards; i++) {
+			// Converts name in array and user input to lower case for comparison
 			for (int iterChar = 0; iterChar < 20; iterChar++) {
-				tempStructName[iterChar] = tolower(namecard[i].personName[iterChar]);
+				tempStructName[iterChar] = tolower(nameCard[i].personName[iterChar]);
 				tempInputName[iterChar] = tolower(inputPersonName[iterChar]);
 			}
 
-			// printf("tempStructName: %s\n", tempStructName); // debug
-			// printf("tempInputtName: %s\n", tempInputName); // debug
-
 			comparisonFlag = strcmp(tempStructName, tempInputName);
-			// printf("Length of tempStructName %d\n", sizeof(tempStructName)); // debug
-			// printf("Length of tempInputName %d\n", sizeof(tempInputName)); // debug
-			// printf("strcmp %d\n", comparisonFlag);
 
+			// If name is found
 			if (comparisonFlag == 0) {
 				printf("The target person name is found\n");
-				printf("nameCardID: %d\n", namecard[i].nameCardID);
-				printf("personName: %s\n", namecard[i].personName);
-				printf("companyName: %s\n", namecard[i].companyName);
+				printf("nameCardID: %d\n", nameCard[i].nameCardID);
+				printf("personName: %s\n", nameCard[i].personName);
+				printf("companyName: %s", nameCard[i].companyName);
 				break;
-			}
-			else {
-				printf("The target person name is not found\n");
 			}
 		}
 
+		if (comparisonFlag != 0) {
+			printf("The target person name is not found\n");
+		}
 		comparisonFlag = 1;
 	}
 	else {
 		printf("The target person name is not found\n");
+	}
+}
+
+// Function sorts name cards in ascending order of ID
+void sortNameCards(NameCard nameCard[], int* numberOfNameCards) {
+	int tempNameCardID;
+	char tempPersonName[20], tempCompanyName[20];
+
+	if (*numberOfNameCards != 0) { // If there are name cards in holder
+		for (int i = 0; i < *numberOfNameCards; i++) { // Iterate through name card holder
+			for (int j = i + 1; j < *numberOfNameCards; j++) {
+				if (nameCard[i].nameCardID > nameCard[j].nameCardID) {
+					tempNameCardID = nameCard[i].nameCardID;
+					strncpy(tempPersonName, nameCard[i].personName, 20);
+					strncpy(tempCompanyName, nameCard[i].companyName, 20);
+
+					nameCard[i].nameCardID = nameCard[j].nameCardID;
+					strncpy(nameCard[i].personName, nameCard[j].personName, 20);
+					strncpy(nameCard[i].companyName, nameCard[j].companyName, 20);
+
+					nameCard[j].nameCardID = tempNameCardID;
+					strncpy(nameCard[j].personName, tempPersonName, 20);
+					strncpy(nameCard[j].companyName, tempCompanyName, 20);
+				}
+			}
+		}
 	}
 }

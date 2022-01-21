@@ -1,4 +1,5 @@
-# SC1003 C Programming
+# SC1003
+# Introduction to Computational Thinking and Programming (in C)
 
 ## Assignment
 1. [NameCardHolder](https://github.com/HippoEug/SC1003/tree/main/Assignment)

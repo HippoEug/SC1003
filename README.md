@@ -9,3 +9,4 @@
 2. [Week 9 (Functions & Pointers)](https://github.com/HippoEug/SC1003/tree/main/Week9)
 3. [Week 10 (Arrays)](https://github.com/HippoEug/SC1003/tree/main/Week10)
 4. [Week 11 (Character Strings)](https://github.com/HippoEug/SC1003/tree/main/Week11)
+5. [Week 12 ()](https://github.com/HippoEug/SC1003/tree/main/Week12)
